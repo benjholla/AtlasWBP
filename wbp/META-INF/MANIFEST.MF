@@ -13,8 +13,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.filesystem,
  org.eclipse.equinox.common,
  org.eclipse.ant.core;bundle-version="3.2.500",
- com.ensoftcorp.atlas.core;bundle-version="0.25.0",
- com.ensoftcorp.atlas.java.core;bundle-version="0.25.0",
- com.ensoftcorp.atlas.java.ui;bundle-version="0.25.0"
+ com.ensoftcorp.atlas.core;bundle-version="0.23.1",
+ com.ensoftcorp.atlas.java.core;bundle-version="0.23.1",
+ com.ensoftcorp.atlas.java.ui;bundle-version="0.23.1",
+ com.ensoftcorp.abp.common;bundle-version="1.0.0",
+ ca.mcgill.sable.soot;bundle-version="2.5.2",
+ ca.mcgill.sable.soot.lib;bundle-version="2.5.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

@@ -24,19 +24,27 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
+import soot.G;
 import wbp.Activator;
 import wbp.ui.PreferencePage;
 
+import com.ensoftcorp.abp.common.util.JimpleUtil;
+import com.ensoftcorp.abp.common.util.JimpleUtil.JimpleSource;
 import com.ensoftcorp.atlas.core.log.Log;
 
 public class WarToJimple {
 	
 	/**
-	 * Create Eclipse project from WAR file
+	 * Creates an Eclipse project from WAR file
+	 * General Overview:
+	 * 1) Unpack the WAR file and dump contents in an empty Eclipse Java project
+	 * 2) Add all the jar files found in the <project>/WEB-INF directory to the classpath
+	 * 3) Run ANT tasks to translate JSP pages to Class files and output to <project>/WEB-INF/classes/*
+	 * 4) JAR generated Class files into <project>/WEB-INF/classes.jar
+	 * 5) Convert classes.jar to Jimple and output to <project>/WEB-INF/jimple/*
 	 */
-	public static IStatus createWarBinaryProject(String projectName, IPath projectPath, File warFile, IProgressMonitor monitor) throws CoreException, IOException {
+	public static IStatus createWarBinaryProject(String projectName, IPath projectPath, File warFile, IProgressMonitor monitor) throws CoreException, IOException, SootConversionException {
 		IProject project = null;
-		
 		try {
 			monitor.beginTask("Creating WAR Binary project", 5);
 			monitor.setTaskName("Unpacking WAR");
@@ -117,8 +125,9 @@ public class WarToJimple {
 			}
 
 			monitor.setTaskName("Adding translated Class files to Jar");
-			File classesJar = new File(projectDirectory.getAbsolutePath() + File.separatorChar + "WEB-INF" + File.separatorChar + "classes.jar");
-			File classesDirectory = new File(projectDirectory.getAbsolutePath() + File.separatorChar + "WEB-INF" + File.separatorChar + "classes");
+			File webinfDirectory = new File(projectDirectory.getAbsolutePath() + File.separatorChar + "WEB-INF");
+			File classesJar = new File(webinfDirectory.getAbsolutePath() + File.separatorChar + "classes.jar");
+			File classesDirectory = new File(webinfDirectory.getAbsolutePath() + File.separatorChar + "classes");
 			WarUtils.jar(classesDirectory, classesJar);
 			monitor.worked(1);
 			if (monitor.isCanceled()){
@@ -127,8 +136,8 @@ public class WarToJimple {
 			
 			// TODO: convert class files to jimple
 			monitor.setTaskName("Converting Jar files to Jimple");
-//			File jimpleDirectory = new File(projectDirectory.getAbsolutePath() + File.separatorChar + "WEB-INF" + File.separatorChar + "jimple");
-//			JarToJimple.
+			File jimpleDirectory = new File(projectDirectory.getAbsolutePath() + File.separatorChar + "WEB-INF" + File.separatorChar + "jimple");
+			jarToJimple(classesJar, jimpleDirectory);
 			monitor.worked(1);
 			
 			return Status.OK_STATUS;
@@ -137,6 +146,42 @@ public class WarToJimple {
 			if (project != null && project.exists()){
 				project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 			}
+		}
+	}
+	
+	// helper method for converting a jar file of classes to jimple
+	private static void jarToJimple(File jar, File outputDirectory) throws SootConversionException {
+		if(!outputDirectory.exists()){
+			outputDirectory.mkdirs();
+		}
+		G savedConfig = G.v();
+		try {
+			G.reset();
+		
+			String[] args = new String[] {
+					"-src-prec", "class", 
+					"--xml-attributes",
+					"-f", "jimple",
+					"-allow-phantom-refs",
+					"-output-dir", outputDirectory.getAbsolutePath(),
+					"-process-dir", jar.getAbsolutePath()
+			};
+			
+			try {
+				soot.Main.main(args);
+				JimpleUtil.writeHeaderFile(JimpleSource.JAR, jar.getAbsolutePath(), outputDirectory.getAbsolutePath());
+			} catch (RuntimeException e) {
+				throw new SootConversionException(e);
+			}
+		} finally {
+			G.set(savedConfig);
+		}
+	}
+	
+	private static class SootConversionException extends Exception {
+		private static final long serialVersionUID = 1L;
+		public SootConversionException(Throwable cause) {
+			super(cause);
 		}
 	}
 	
