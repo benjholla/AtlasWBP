@@ -2,6 +2,7 @@ package wbp.ui;
 
 import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -29,7 +30,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	protected void createFieldEditors() {
 		addField(new DirectoryFieldEditor(TOMCAT_PATH, 
 				"&" + TOMCAT_PATH_DESCRIPTION + ":", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(ANT_PRECOMPILE_JSP_BUILD_TASK_PATH, 
+		addField(new FileFieldEditor(ANT_PRECOMPILE_JSP_BUILD_TASK_PATH, 
 				"&" + ANT_PRECOMPILE_JSP_BUILD_TASK_PATH_DESCRIPTION + ":", getFieldEditorParent()));
 	}
 

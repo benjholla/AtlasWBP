@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -23,6 +24,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
@@ -94,7 +96,7 @@ public class WarToJimple {
 		IProject project = null;
 		
 		try {
-			monitor.beginTask("Creating new project", 5);
+			monitor.beginTask("Creating WAR Binary project", 5);
 			monitor.setTaskName("Unpacking WAR");
 			File projectDirectory = new File(projectPath + File.separator + projectName);
 			
@@ -106,7 +108,7 @@ public class WarToJimple {
 			monitor.worked(1);
 
 			// create empty Java project
-			monitor.setTaskName("Creating project");
+			monitor.setTaskName("Creating Eclipse project");
 			project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 			IProjectDescription desc = project.getWorkspace().newProjectDescription(project.getName());
 			URI location = null;
@@ -125,24 +127,30 @@ public class WarToJimple {
 			project.create(desc, null);
 			IJavaProject jProject = JavaCore.create(project);
 			project.open(new NullProgressMonitor());
-			monitor.worked(1);
+			List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
 			
-			if (monitor.isCanceled()){
-				return Status.CANCEL_STATUS;
+			// add the JAR libraries in the WEB-INF folder to the project classpath
+			LinkedList<File> projectJars = getProjectJars(projectDirectory);
+			for(File projectJar : projectJars){
+				String projectJarCanonicalPath = projectJar.getCanonicalPath();
+				String projectCanonicalPath = projectDirectory.getCanonicalPath();
+				String projectJarBasePath = projectJarCanonicalPath.substring(projectJarCanonicalPath.indexOf(projectCanonicalPath));
+				String projectJarParentCanonicalPath = projectJar.getCanonicalPath();
+				String projectJarParentBasePath = projectJarParentCanonicalPath.substring(projectJarParentCanonicalPath.indexOf(projectCanonicalPath));
+				entries.add(JavaCore.newLibraryEntry(new Path(projectJarBasePath), null, new Path(projectJarParentBasePath)));
 			}
 			
-			List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
+			// set the class path
 			jProject.setRawClasspath(entries.toArray(new IClasspathEntry[entries.size()]), null);
 			
 			monitor.worked(1);
+			Log.info("Successfully created WBP project");
 			if (monitor.isCanceled()){
 				return Status.CANCEL_STATUS;
 			}
-			Log.info("Project created successfully!");
 
-			// TODO: run ant tasks to precompile JSPs
+			// run ant tasks to precompile JSPs
 			monitor.setTaskName("Translating Java Server Pages");
-			
 			String tomcatPath = Activator.getDefault().getPreferenceStore().getString(PreferencePage.TOMCAT_PATH);
 			if(tomcatPath == null || tomcatPath.equals("")){
 				throw new RuntimeException(PreferencePage.TOMCAT_PATH_DESCRIPTION + " is not set.");
@@ -151,7 +159,6 @@ public class WarToJimple {
 			if(!tomcatDirectory.exists()){
 				throw new RuntimeException(tomcatDirectory.getAbsolutePath() + " does not exist.");
 			}
-			
 			String buildTaskPath = Activator.getDefault().getPreferenceStore().getString(PreferencePage.ANT_PRECOMPILE_JSP_BUILD_TASK_PATH);
 			if(buildTaskPath == null || buildTaskPath.equals("")){
 				throw new RuntimeException(PreferencePage.ANT_PRECOMPILE_JSP_BUILD_TASK_PATH_DESCRIPTION + " is not set.");
@@ -160,19 +167,21 @@ public class WarToJimple {
 			if(!buildTaskFile.exists()){
 				throw new RuntimeException(buildTaskFile.getAbsolutePath() + " does not exist.");
 			}
-			
-			precompileJavaServerPages(tomcatDirectory, projectDirectory, buildTaskFile, monitor);
+			precompileJavaServerPages(tomcatDirectory, projectDirectory, buildTaskFile, new NullProgressMonitor());
 			monitor.worked(1);
-			
-			// TODO: convert class files to jimple
-			monitor.setTaskName("Converting Class files to Jimple");
-//			String outputDir = projectPath.toString() + File.separator + projectName + File.separator + "src";
-//			WarToJimple.warToJimple(war, outputDir);
-			monitor.worked(1);
-			
+			Log.info("Successfully translated JSPs");
 			if (monitor.isCanceled()){
 				return Status.CANCEL_STATUS;
 			}
+
+			// TODO: implement
+			monitor.setTaskName("Adding translated Class files to Jar");
+			
+			// TODO: convert class files to jimple
+			monitor.setTaskName("Converting Jar files to Jimple");
+//			String outputDir = projectPath.toString() + File.separator + projectName + File.separator + "src";
+//			WarToJimple.warToJimple(war, outputDir);
+			monitor.worked(1);
 			
 			return Status.OK_STATUS;
 		} finally {
@@ -181,6 +190,28 @@ public class WarToJimple {
 				project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 			}
 		}
+	}
+	
+	// helper method for location project jar libraries
+	private static LinkedList<File> getProjectJars(File projectDirectory){
+		return findJars(new File(projectDirectory.getAbsolutePath() + File.separatorChar + "WEB-INF"));
+	}
+	
+	// helper method for recursively finding jar files in a given directory
+	private static LinkedList<File> findJars(File directory){
+		LinkedList<File> jars = new LinkedList<File>();
+		if(directory.exists()){
+			if (directory.isDirectory()) {
+				for (File c : directory.listFiles()) {
+					jars.addAll(findJars(c));
+				}
+			}
+			File file = directory;
+			if(file.getName().endsWith(".jar")){
+				jars.add(file);
+			}
+		}
+		return jars;
 	}
 	
 	// helper method to translate the JSPs to class files inside the project
