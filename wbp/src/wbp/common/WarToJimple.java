@@ -1,17 +1,11 @@
 package wbp.common;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import org.eclipse.ant.core.AntRunner;
 import org.eclipse.core.filesystem.URIUtil;
@@ -36,58 +30,6 @@ import wbp.ui.PreferencePage;
 import com.ensoftcorp.atlas.core.log.Log;
 
 public class WarToJimple {
-
-	// helper function to recursively delete a file or directory
-	private static void delete(File file) throws FileNotFoundException {
-		if(file.exists()) {
-			if (file.isDirectory()) {
-				for (File c : file.listFiles()) {
-					delete(c);
-				}
-			}
-			if (!file.delete()){
-				throw new FileNotFoundException("Failed to delete file: " + file);
-			}
-		}
-	}
-	
-	// helper file to unzip the WAR file contents
-	private static void unzip(String zipFile, String outputFolder) throws IOException {
-		byte[] buffer = new byte[1024];
-		ZipFile archive = new ZipFile(new File(zipFile));
-		try {
-			Enumeration<? extends ZipEntry> entries = archive.entries();
-			while (entries.hasMoreElements()) {
-				ZipEntry entry = entries.nextElement();
-				File file = new File(outputFolder + File.separator + entry.getName());
-				// create a place to put the file or make the directory
-				if(entry.isDirectory()){
-					file.mkdirs();
-					continue;
-				} else {
-					new File(file.getParent()).mkdirs();
-				}
-				// write the file
-				FileOutputStream out = new FileOutputStream(file);
-				try {
-					InputStream in = archive.getInputStream(entry);
-					try {
-						int len;
-						while ((len = in.read(buffer)) > 0) {
-							out.write(buffer, 0, len);
-						}
-					} finally {
-						in.close();
-					}
-					out.flush();
-				} finally {
-					out.close();
-				}
-			}
-		} finally {
-			archive.close();
-		}
-	}
 	
 	/**
 	 * Create Eclipse project from WAR file
@@ -101,10 +43,10 @@ public class WarToJimple {
 			File projectDirectory = new File(projectPath + File.separator + projectName);
 			
 			// clean stale files from project directory
-			delete(projectDirectory);
+			WarUtils.delete(projectDirectory);
 
 			// extract war contents to project directory
-			unzip(warFile.getAbsolutePath(), projectDirectory.getAbsolutePath());
+			WarUtils.unjar(warFile, projectDirectory);
 			monitor.worked(1);
 
 			// create empty Java project
@@ -174,13 +116,19 @@ public class WarToJimple {
 				return Status.CANCEL_STATUS;
 			}
 
-			// TODO: implement
 			monitor.setTaskName("Adding translated Class files to Jar");
+			File classesJar = new File(projectDirectory.getAbsolutePath() + File.separatorChar + "WEB-INF" + File.separatorChar + "classes.jar");
+			File classesDirectory = new File(projectDirectory.getAbsolutePath() + File.separatorChar + "WEB-INF" + File.separatorChar + "classes");
+			WarUtils.jar(classesDirectory, classesJar);
+			monitor.worked(1);
+			if (monitor.isCanceled()){
+				return Status.CANCEL_STATUS;
+			}
 			
 			// TODO: convert class files to jimple
 			monitor.setTaskName("Converting Jar files to Jimple");
-//			String outputDir = projectPath.toString() + File.separator + projectName + File.separator + "src";
-//			WarToJimple.warToJimple(war, outputDir);
+//			File jimpleDirectory = new File(projectDirectory.getAbsolutePath() + File.separatorChar + "WEB-INF" + File.separatorChar + "jimple");
+//			JarToJimple.
 			monitor.worked(1);
 			
 			return Status.OK_STATUS;
