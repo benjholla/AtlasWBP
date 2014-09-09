@@ -52,23 +52,19 @@ public class ImportWARWizard extends Wizard implements IImportWizard {
 	
 	public ImportWARWizard(String startWARPath) {
 		page = new NewWARBinaryProjectPage("Create WAR Binary Project", startWARPath);
-		
-		String name = new File(startWARPath).getName();
-		name = name.substring(0, name.lastIndexOf('.'));
-		
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(name);
+		String projectName = new File(startWARPath).getName();
+		projectName = projectName.substring(0, projectName.lastIndexOf('.'));
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		if (project.exists()) {
 			// find a project name that doesn't collide
 			int i = 2;
 			while (project.exists()) {
 				i++;
-				project = ResourcesPlugin.getWorkspace().getRoot().getProject(name + "_" + i);
+				project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName + "_" + i);
 			}
-			name = name + "_" + i;
+			projectName = projectName + "_" + i;
 		}
-		
-		page.setInitialProjectName(name);
-		
+		page.setInitialProjectName(projectName);
 		this.setWindowTitle("Create WAR Binary Project");
 	}
 	
@@ -92,7 +88,6 @@ public class ImportWARWizard extends Wizard implements IImportWizard {
 		final File warFile = new File(page.getWARPath());
 
 		IRunnableWithProgress j = new IRunnableWithProgress() {
-
 			@Override
 			public void run(IProgressMonitor monitor) {
 				IStatus result = null;

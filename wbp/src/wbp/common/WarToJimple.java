@@ -31,6 +31,7 @@ import com.ensoftcorp.atlas.core.log.Log;
 
 public class WarToJimple {
 
+	// helper function to recursively delete a file or directory
 	private static void delete(File file) throws FileNotFoundException {
 		if(file.exists()) {
 			if (file.isDirectory()) {
@@ -44,25 +45,24 @@ public class WarToJimple {
 		}
 	}
 	
+	// helper file to unzip the WAR file contents
 	private static void unzip(String zipFile, String outputFolder) throws IOException {
 		byte[] buffer = new byte[1024];
-
 		ZipFile archive = new ZipFile(new File(zipFile));
 		try {
 			Enumeration<? extends ZipEntry> entries = archive.entries();
-	
 			while (entries.hasMoreElements()) {
 				ZipEntry entry = entries.nextElement();
-				File newFile = new File(outputFolder + File.separator + entry.getName());
-				
+				File file = new File(outputFolder + File.separator + entry.getName());
+				// create a place to put the file or make the directory
 				if(entry.isDirectory()){
-					newFile.mkdirs();
+					file.mkdirs();
 					continue;
 				} else {
-					new File(newFile.getParent()).mkdirs();
+					new File(file.getParent()).mkdirs();
 				}
-				
-				FileOutputStream out = new FileOutputStream(newFile);
+				// write the file
+				FileOutputStream out = new FileOutputStream(file);
 				try {
 					InputStream in = archive.getInputStream(entry);
 					try {
@@ -83,19 +83,22 @@ public class WarToJimple {
 		}
 	}
 	
+	/**
+	 * Create Eclipse project from WAR file
+	 */
 	public static IStatus createWarBinaryProject(String projectName, IPath projectPath, File warFile, IProgressMonitor monitor) throws CoreException, IOException {
 		IProject project = null;
 		
 		try {
-			monitor.beginTask("Creating new project", 6);
+			monitor.beginTask("Creating new project", 5);
+			monitor.setTaskName("Unpacking WAR");
+			File projectDirectory = new File(projectPath + File.separator + projectName);
+			
+			// clean stale files from project directory
+			delete(projectDirectory);
 
-			monitor.setTaskName("Unpacking war");
-			String unpackedPath = projectPath + File.separator + projectName;
-
-			File projectHandle = new File(unpackedPath);
-			delete(projectHandle);
-
-			unzip(warFile.getAbsolutePath(), unpackedPath);
+			// extract war contents to project directory
+			unzip(warFile.getAbsolutePath(), projectDirectory.getAbsolutePath());
 			monitor.worked(1);
 
 			// create empty Java project
@@ -125,7 +128,6 @@ public class WarToJimple {
 			}
 			
 			List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
-			
 			jProject.setRawClasspath(entries.toArray(new IClasspathEntry[entries.size()]), null);
 			
 			monitor.worked(1);
@@ -134,12 +136,15 @@ public class WarToJimple {
 			}
 			Log.info("Project created successfully!");
 
-			// Disassemble war into project
-			monitor.setTaskName("Converting class files to jimple");
+			// TODO: run ant tasks to precompile JSPs
+			monitor.setTaskName("Translating Java Server Pages");
+			monitor.worked(1);
 			
-//			TODO: String outputDir = projectPath.toString() + File.separator + projectName + File.separator + "src";
-//			TODO: WarToJimple.warToJimple(war, outputDir);
-			monitor.worked(3);
+			// TODO: convert class files to jimple
+			monitor.setTaskName("Converting class files to jimple");
+//			String outputDir = projectPath.toString() + File.separator + projectName + File.separator + "src";
+//			WarToJimple.warToJimple(war, outputDir);
+			monitor.worked(1);
 			
 			if (monitor.isCanceled()){
 				return Status.CANCEL_STATUS;
