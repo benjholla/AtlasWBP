@@ -18,5 +18,14 @@
          </description>
       </wizard>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="Atlas"
+            class="wbp.ui.PreferencePage"
+            id="wbp.preferences"
+            name="WBP Preferences">
+      </page>
+   </extension>
 
 </plugin>

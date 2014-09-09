@@ -28,6 +28,9 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
+import wbp.Activator;
+import wbp.ui.PreferencePage;
+
 import com.ensoftcorp.atlas.core.log.Log;
 
 public class WarToJimple {
@@ -139,6 +142,26 @@ public class WarToJimple {
 
 			// TODO: run ant tasks to precompile JSPs
 			monitor.setTaskName("Translating Java Server Pages");
+			
+			String tomcatPath = Activator.getDefault().getPreferenceStore().getString(PreferencePage.TOMCAT_PATH);
+			if(tomcatPath == null || tomcatPath.equals("")){
+				throw new RuntimeException(PreferencePage.TOMCAT_PATH_DESCRIPTION + " is not set.");
+			}
+			File tomcatDirectory = new File(tomcatPath);
+			if(!tomcatDirectory.exists()){
+				throw new RuntimeException(tomcatDirectory.getAbsolutePath() + " does not exist.");
+			}
+			
+			String buildTaskPath = Activator.getDefault().getPreferenceStore().getString(PreferencePage.ANT_PRECOMPILE_JSP_BUILD_TASK_PATH);
+			if(buildTaskPath == null || buildTaskPath.equals("")){
+				throw new RuntimeException(PreferencePage.ANT_PRECOMPILE_JSP_BUILD_TASK_PATH_DESCRIPTION + " is not set.");
+			}
+			File buildTaskFile = new File(buildTaskPath);
+			if(!buildTaskFile.exists()){
+				throw new RuntimeException(buildTaskFile.getAbsolutePath() + " does not exist.");
+			}
+			
+			precompileJavaServerPages(tomcatDirectory, projectDirectory, buildTaskFile, monitor);
 			monitor.worked(1);
 			
 			// TODO: convert class files to jimple
@@ -160,7 +183,8 @@ public class WarToJimple {
 		}
 	}
 	
-	private void precompileJavaServerPages(File tomcatDirectory, File projectDirectory, File buildFile, IProgressMonitor monitor) throws CoreException {
+	// helper method to translate the JSPs to class files inside the project
+	private static void precompileJavaServerPages(File tomcatDirectory, File projectDirectory, File buildFile, IProgressMonitor monitor) throws CoreException {
 		AntRunner runner = new AntRunner();
 		runner.setBuildFileLocation(buildFile.getAbsolutePath());
 		runner.setArguments("-Dtomcat.home=\"" + tomcatDirectory.getAbsolutePath() 
