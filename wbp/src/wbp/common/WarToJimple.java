@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.eclipse.ant.core.AntRunner;
 import org.eclipse.core.filesystem.URIUtil;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -141,7 +142,7 @@ public class WarToJimple {
 			monitor.worked(1);
 			
 			// TODO: convert class files to jimple
-			monitor.setTaskName("Converting class files to jimple");
+			monitor.setTaskName("Converting Class files to Jimple");
 //			String outputDir = projectPath.toString() + File.separator + projectName + File.separator + "src";
 //			WarToJimple.warToJimple(war, outputDir);
 			monitor.worked(1);
@@ -157,6 +158,14 @@ public class WarToJimple {
 				project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 			}
 		}
+	}
+	
+	private void precompileJavaServerPages(File tomcatDirectory, File projectDirectory, File buildFile, IProgressMonitor monitor) throws CoreException {
+		AntRunner runner = new AntRunner();
+		runner.setBuildFileLocation(buildFile.getAbsolutePath());
+		runner.setArguments("-Dtomcat.home=\"" + tomcatDirectory.getAbsolutePath() 
+							+ "\" -Dwebapp.path=\"" + projectDirectory.getAbsolutePath() + "\"");
+		runner.run(monitor);
 	}
 	
 }
