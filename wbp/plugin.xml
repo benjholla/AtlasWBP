@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="wbp.ui.sampleCategory"
+            name="WAR Binary Processing">
+      </category>
+      <wizard
+            category="wbp.ui.sampleCategory"
+            class="wbp.ui.ImportWARWizard"
+            icon="icons/WBP.gif"
+            id="wbp.ui.ImportWARWizard"
+            name="Import WAR Binary Project">
+         <description>
+            Import a WAR binary project into the workspace.
+         </description>
+      </wizard>
+   </extension>
+
+</plugin>
