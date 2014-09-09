@@ -4,11 +4,11 @@
    <extension
          point="org.eclipse.ui.importWizards">
       <category
-            id="wbp.ui.sampleCategory"
-            name="WAR Binary Processing">
+            id="wbp.ui.category"
+            name="WAR Binary Project">
       </category>
       <wizard
-            category="wbp.ui.sampleCategory"
+            category="WAR Binary Project"
             class="wbp.ui.ImportWARWizard"
             icon="icons/WBP.gif"
             id="wbp.ui.ImportWARWizard"
@@ -21,7 +21,6 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            category="Atlas"
             class="wbp.ui.PreferencePage"
             id="wbp.preferences"
             name="WBP Preferences">

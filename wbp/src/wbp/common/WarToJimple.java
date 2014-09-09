@@ -23,6 +23,9 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.jdt.launching.LibraryLocation;
 
 import soot.G;
 import wbp.Activator;
@@ -78,6 +81,12 @@ public class WarToJimple {
 			IJavaProject jProject = JavaCore.create(project);
 			project.open(new NullProgressMonitor());
 			List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
+			
+			// add the default JVM classpath (Tomcat uses the same libraries unless it was overridden)
+			IVMInstall vmInstall = JavaRuntime.getDefaultVMInstall();
+			for (LibraryLocation element : JavaRuntime.getLibraryLocations(vmInstall)) {
+				entries.add(JavaCore.newLibraryEntry(element.getSystemLibraryPath(), null, null));
+			}
 			
 			// add the JAR libraries in the WEB-INF folder to the project classpath
 			LinkedList<File> projectJars = getProjectJars(projectDirectory);
@@ -178,10 +187,11 @@ public class WarToJimple {
 		}
 	}
 	
+	// Throwable exception wrapper to make a runtime soot conversion exception checked
 	private static class SootConversionException extends Exception {
 		private static final long serialVersionUID = 1L;
-		public SootConversionException(Throwable cause) {
-			super(cause);
+		public SootConversionException(Throwable t) {
+			super(t);
 		}
 	}
 	
