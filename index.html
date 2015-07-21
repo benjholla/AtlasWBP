@@ -38,15 +38,32 @@
         <section id="main_content">
 
         <h3><a name="Overview" class="anchor" href="#Overview"><span class="octicon octicon-link"></span></a>Overview</h3>
-        <p>The WAR Binary Processing project is a frontend plugin built on top of <a href="http://www.ensoftcorp.com/atlas/">Atlas</a> to add support for processing <a href="https://en.wikipedia.org/wiki/WAR_%28file_format%29">Java WAR</a> binaries.</p>
+        <p>The WAR Binary Processing project is a frontend plugin built on top of <a href="http://www.ensoftcorp.com/atlas/">Atlas</a> to add support for processing <a href="https://en.wikipedia.org/wiki/WAR_%28file_format%29">Java WAR</a> binaries for use in program analysis.</p>
+
+        <blockquote cite="https://en.wikipedia.org/wiki/WAR_(file_format)" style="font-size: 16px;"><p>In software engineering, a WAR file (or Web application ARchive) is a JAR file used to distribute a collection of JavaServer Pages, Java Servlets, Java classes, XML files, tag libraries, static web pages (HTML and related files) and other resources that together constitute a web application.</p><p>Source: <a href="https://en.wikipedia.org/wiki/WAR_(file_format)">https://en.wikipedia.org/wiki/WAR_(file_format)</a></p></blockquote> 
+
+        <p>Java Server Pages (JSPs) are an abstraction of Java Servlets.  A Servlet is a class that implements the Java Servlet API.  The Java Servlet API is a protocol that follows the request<->response programming model.  Servlets are not limited to any particular protocol but usually HTTP is used and while Servlets typically generate HTML or XML content they are not limited to any particular data format.</p>
+
+        <p>Looking at the figure below we can see that a client (represented as the computer at the top center) makes a request (most likely an HTTP request) to a .JSP page (Example: <code>http://www.example.com/test.jsp</code>). Once the request is received the JSP translator (such as a Tomcat server) translates the JSP page into a Java Servlet that is then compiled to Java byte code and execute in the Java Virtual Machine on the server. The result of executing the compiled Servlet is then returned as a response (most likely via a HTTP response) to the client machine.</p>
+
+        <a href="https://en.wikipedia.org/wiki/Java_servlet#/media/File:JSPLife.png"><img src="./images/JSPLifecycle.png" alt="JSP Lifecycle" /></a>
 
         <h3><a name="Features" class="anchor" href="#Features"><span class="octicon octicon-link"></span></a>Features</h3>
         <p>The aim of this project is to provide an Atlas for Jimple frontend for processing Java WAR binaries. The project features are listed below.</p>
         <ul>
           <li>Import Wizard for processing Java WARs</li>
           <li>Extensible support for multiple JSP translator platforms</li>
-          <li>Tested precompilation support for Tomcat 6, 7, and 8</li>
+          <li>Tested pre-compilation support for Tomcat 6, 7, and 8</li>
         </ul>
+
+        <p>The high-level process that this plugin performs is the following:</p>
+        <ol>
+          <li>Unpack the WAR file and dump contents in an empty Eclipse Java project</li>
+          <li>Add all the JAR files found in the <code><project>/WEB-INF</code> directory to the classpath</li>
+          <li>Run ANT tasks to translate JSP pages to Class files and output to <code>&lt;project&gt;/WEB-INF/classes/*</code></li>
+          <li>JAR generated Class files into <code>&lt;project&gt;/WEB-INF/classes.jar</code></li>
+          <li>Convert classes.jar to Jimple and output to <code>&lt;project&gt;/WEB-INF/jimple/*</code></li>
+        </ol>
 
         <h3><a name="GettingStarted" class="anchor" href="#GettingStarted"><span class="octicon octicon-link"></span></a>Getting Started</h3>
         <p>Ready to get started?</p>
