@@ -10,8 +10,8 @@ import wbp.Activator;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public static final String TOMCAT_PATH = "TOMCAT_PATH";
-	public static final String TOMCAT_PATH_DESCRIPTION = "Tomcat Directory";
+	public static final String TRANSLATOR_PATH = "TRANSLATOR_PATH";
+	public static final String TRANSLATOR_PATH_DESCRIPTION = "Translator Directory";
 	
 	public static final String ANT_PRECOMPILE_JSP_BUILD_TASK_PATH = "ANT_PRECOMPILE_JSP_BUILD_TASK_PATH";
 	public static final String ANT_PRECOMPILE_JSP_BUILD_TASK_PATH_DESCRIPTION = "Ant Precompile JSP Build Task";
@@ -28,10 +28,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 	@Override
 	protected void createFieldEditors() {
-		addField(new DirectoryFieldEditor(TOMCAT_PATH, 
-				"&" + TOMCAT_PATH_DESCRIPTION + ":", getFieldEditorParent()));
-		addField(new FileFieldEditor(ANT_PRECOMPILE_JSP_BUILD_TASK_PATH, 
-				"&" + ANT_PRECOMPILE_JSP_BUILD_TASK_PATH_DESCRIPTION + ":", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(TRANSLATOR_PATH, "&" + TRANSLATOR_PATH_DESCRIPTION + ":", getFieldEditorParent()));
+		addField(new FileFieldEditor(ANT_PRECOMPILE_JSP_BUILD_TASK_PATH, "&" + ANT_PRECOMPILE_JSP_BUILD_TASK_PATH_DESCRIPTION + ":", getFieldEditorParent()));
 	}
 
 }

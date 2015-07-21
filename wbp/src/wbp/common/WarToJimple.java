@@ -6,6 +6,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeSet;
 
 import org.eclipse.ant.core.AntRunner;
 import org.eclipse.core.filesystem.URIUtil;
@@ -28,12 +29,15 @@ import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.LibraryLocation;
 
 import soot.G;
+import soot.SootClass;
+import soot.util.Chain;
 import wbp.Activator;
+import wbp.log.Log;
 import wbp.ui.PreferencePage;
 
+import com.ensoftcorp.abp.common.soot.ConfigManager;
 import com.ensoftcorp.abp.common.util.JimpleUtil;
 import com.ensoftcorp.abp.common.util.JimpleUtil.JimpleSource;
-import com.ensoftcorp.atlas.core.log.Log;
 
 public class WarToJimple {
 	
@@ -82,7 +86,7 @@ public class WarToJimple {
 			project.open(new NullProgressMonitor());
 			List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
 			
-			// add the default JVM classpath (Tomcat uses the same libraries unless it was overridden)
+			// add the default JVM classpath (assuming translator uses the same jvm libraries)
 			IVMInstall vmInstall = JavaRuntime.getDefaultVMInstall();
 			for (LibraryLocation element : JavaRuntime.getLibraryLocations(vmInstall)) {
 				entries.add(JavaCore.newLibraryEntry(element.getSystemLibraryPath(), null, null));
@@ -110,13 +114,13 @@ public class WarToJimple {
 
 			// run ant tasks to precompile JSPs
 			monitor.setTaskName("Translating Java Server Pages");
-			String tomcatPath = Activator.getDefault().getPreferenceStore().getString(PreferencePage.TOMCAT_PATH);
-			if(tomcatPath == null || tomcatPath.equals("")){
-				throw new RuntimeException(PreferencePage.TOMCAT_PATH_DESCRIPTION + " is not set.");
+			String translatorPath = Activator.getDefault().getPreferenceStore().getString(PreferencePage.TRANSLATOR_PATH);
+			if(translatorPath == null || translatorPath.equals("")){
+				throw new RuntimeException(PreferencePage.TRANSLATOR_PATH_DESCRIPTION + " is not set.");
 			}
-			File tomcatDirectory = new File(tomcatPath);
-			if(!tomcatDirectory.exists()){
-				throw new RuntimeException(tomcatDirectory.getAbsolutePath() + " does not exist.");
+			File translatorDirectory = new File(translatorPath);
+			if(!translatorDirectory.exists()){
+				throw new RuntimeException(translatorDirectory.getAbsolutePath() + " does not exist.");
 			}
 			String buildTaskPath = Activator.getDefault().getPreferenceStore().getString(PreferencePage.ANT_PRECOMPILE_JSP_BUILD_TASK_PATH);
 			if(buildTaskPath == null || buildTaskPath.equals("")){
@@ -126,7 +130,7 @@ public class WarToJimple {
 			if(!buildTaskFile.exists()){
 				throw new RuntimeException(buildTaskFile.getAbsolutePath() + " does not exist.");
 			}
-			precompileJavaServerPages(tomcatDirectory, projectDirectory, buildTaskFile, new NullProgressMonitor());
+			precompileJavaServerPages(translatorDirectory, projectDirectory, buildTaskFile, new NullProgressMonitor());
 			monitor.worked(1);
 			Log.info("Successfully translated JSPs");
 			if (monitor.isCanceled()){
@@ -143,7 +147,6 @@ public class WarToJimple {
 				return Status.CANCEL_STATUS;
 			}
 			
-			// TODO: convert class files to jimple
 			monitor.setTaskName("Converting Jar files to Jimple");
 			File jimpleDirectory = new File(projectDirectory.getAbsolutePath() + File.separatorChar + "WEB-INF" + File.separatorChar + "jimple");
 			jarToJimple(classesJar, jimpleDirectory);
@@ -163,7 +166,7 @@ public class WarToJimple {
 		if(!outputDirectory.exists()){
 			outputDirectory.mkdirs();
 		}
-		G savedConfig = G.v();
+		ConfigManager.getInstance().startTempConfig();
 		try {
 			G.reset();
 		
@@ -179,11 +182,28 @@ public class WarToJimple {
 			try {
 				soot.Main.main(args);
 				JimpleUtil.writeHeaderFile(JimpleSource.JAR, jar.getAbsolutePath(), outputDirectory.getAbsolutePath());
+				
+				// warn about any phantom references
+				Chain<SootClass> phantomClasses = soot.Scene.v().getPhantomClasses();
+                if (!phantomClasses.isEmpty()) {
+                        TreeSet<String> missingClasses = new TreeSet<String>();
+                        for (SootClass sootClass : phantomClasses) {
+                                missingClasses.add(sootClass.toString());
+                        }
+                        StringBuilder message = new StringBuilder();
+                        message.append("Some classes were referenced, but could not be found.\n\n");
+                        for (String sootClass : missingClasses) {
+                                message.append(sootClass);
+                                message.append("\n");
+                        }
+                        Log.warning(message.toString());
+                }
 			} catch (RuntimeException e) {
 				throw new SootConversionException(e);
 			}
 		} finally {
-			G.set(savedConfig);
+			// restore the saved config (even if there was an error)
+            ConfigManager.getInstance().endTempConfig();
 		}
 	}
 	
@@ -218,10 +238,10 @@ public class WarToJimple {
 	}
 	
 	// helper method to translate the JSPs to class files inside the project
-	private static void precompileJavaServerPages(File tomcatDirectory, File projectDirectory, File buildFile, IProgressMonitor monitor) throws CoreException {
+	private static void precompileJavaServerPages(File translatorDirectory, File projectDirectory, File buildFile, IProgressMonitor monitor) throws CoreException {
 		AntRunner runner = new AntRunner();
 		runner.setBuildFileLocation(buildFile.getAbsolutePath());
-		runner.setArguments("-Dtomcat.home=\"" + tomcatDirectory.getAbsolutePath() 
+		runner.setArguments("-Dtranslator.home=\"" + translatorDirectory.getAbsolutePath() 
 							+ "\" -Dwebapp.path=\"" + projectDirectory.getAbsolutePath() + "\"");
 		runner.run(monitor);
 	}

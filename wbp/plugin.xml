@@ -5,10 +5,10 @@
          point="org.eclipse.ui.importWizards">
       <category
             id="wbp.ui.category"
-            name="WAR Binary Project">
+            name="WBP">
       </category>
       <wizard
-            category="WAR Binary Project"
+            category="wbp.ui.category"
             class="wbp.ui.ImportWARWizard"
             icon="icons/WBP.gif"
             id="wbp.ui.ImportWARWizard"
@@ -23,7 +23,7 @@
       <page
             class="wbp.ui.PreferencePage"
             id="wbp.preferences"
-            name="WBP Preferences">
+            name="WBP">
       </page>
    </extension>
 
