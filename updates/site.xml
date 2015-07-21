@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/AtlasWBP_2.3.1.qualifier.jar" id="AtlasWBP" version="2.3.1.qualifier">
+   <description name="ben-holland.com" url="http://ben-holland.com/AtlasWBP/updates/">
+      The primary update site for Atlas WAR Binary Processing
+   </description>
+   <feature url="features/AtlasWBP_2.3.1.201507211612.jar" id="AtlasWBP" version="2.3.1.201507211612">
       <category name="Atlas WAR Binary Processing"/>
    </feature>
    <category-def name="Atlas WAR Binary Processing" label="Atlas WAR Binary Processing">
