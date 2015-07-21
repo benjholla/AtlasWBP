@@ -12,7 +12,7 @@
             class="wbp.ui.ImportWARWizard"
             icon="icons/WBP.gif"
             id="wbp.ui.ImportWARWizard"
-            name="Import WAR Binary Project">
+            name="WAR Binary Project">
          <description>
             Import a WAR binary project into the workspace.
          </description>
