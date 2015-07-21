@@ -41,6 +41,25 @@
         <p>If you haven't already, <a href="./install.html">install</a> the WAR Binary Processing plugin into Eclipse.</p>
 
         <h3><a name="Configuration" class="anchor" href="#Configuration"><span class="octicon octicon-link"></span></a>Configuration</h3>
+		<p>The typical contents of a WAR file include a <code>META-INF</code> directory that contains the WAR manifest, a <code>WEB-INF</code> directory that contains compiled Java Class files, support libraries, and a web.xml file. At the root level there are static web resources such as JavaScript, CSS, and images, as well as uncompiled JSP files (denoted below as the <code>myjsps</code> directory).</p>
+		<pre><code>|-META-INF
+|---MANIFEST.MF
+|-WEB-INF
+|---classes
+|-----com
+|-------example
+|---------demo
+|-----------SomeObject.class
+|---lib
+|-----mysql-connector-bin.jar
+|-css
+|--..
+|-img
+|--..
+|-js
+|--..
+|-myjsps
+|---default.jsp</code></pre>
         <p>A JSP file cannot be directly converted to Jimple, the JSP files must be translated (precompiled) to Java Class files first. AtlasWBP uses a configurable ANT task to precompile the JSPs to Class files given an appropriate translator (i.e. Tomcat Server). After the Ant build task has completed the directory tree will look something like the following.</p>
 		<pre><code>|-META-INF
 |---MANIFEST.MF
