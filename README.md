@@ -13,7 +13,7 @@ Java Server Pages (JSPs) are an abstraction of Java Servlets.  A Servlet is a cl
 
 Looking at the figure below we can see that a client (represented as the computer at the top center) makes a request (most likely an HTTP request) to a .JSP page (Example http://www.example.com/test.jsp). Once the request is received the JSP translator (such as a Tomcat server) translates the JSP page into a Java Servlet that is then compiled to Java byte code and execute in the Java Virtual Machine on the server. The result of executing the compiled Servlet is then returned as a response (most likely via a HTTP response) to the client machine.
 
-![JSP Lifecycle](./README/JSPLifecycle.png)
+![JSP Lifecycle](https://ben-holland.com/AtlasWBP/images/JSPLifecycle.png)
 
 ## Implementation Details
 
