@@ -119,6 +119,6 @@ Click `Apply` and `OK` to apply the changes to the AtlasWBP preference settings.
 
 Navigate to `File`->`Import`.  Select `WBP`->`WAR Binary Project` and press `Next`.  Browse to the WAR file to import and enter a name for the Eclipse project to create.  
 
-To index the project, navigate to the `Atlas` menu and select `Manage Project Settings`.  Ensure that the WAR file binary project is listed under the `Index` column and other projects that should be excluded from the analysis are not listed.  Click `OK` when the project index settings are correct, then navigate to the `Atlas` menu and select `Re-Map Workspace`.  When the indexing process is complete you can query against indexed project like normal.  For additional information on using Atlas see [http://www.ensoftcorp.com/atlas/](http://www.ensoftcorp.com/atlas/).
+To index the project, navigate to the `Atlas` menu and select `Manage Project Settings`.  Ensure that the WAR file binary project is listed under the `Map` column and other projects that should be excluded from the analysis are not listed.  Click `OK` when the project index settings are correct, then navigate to the `Atlas` menu and select `Re-Map Workspace`.  When the indexing process is complete you can query against indexed project like normal.  For additional information on using Atlas see [http://www.ensoftcorp.com/atlas/](http://www.ensoftcorp.com/atlas/).
 
 Note: This process was tested with a WAR binary file from [https://github.com/benjholla/LoginSideChannels](https://github.com/benjholla/LoginSideChannels).
