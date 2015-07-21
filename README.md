@@ -19,7 +19,7 @@ Looking at the figure below we can see that a client (represented as the compute
 
 ### High-level Process
 
-<old>
+<ol>
 <li>Unpack the WAR file and dump contents in an empty Eclipse Java project</li>
 <li>Add all the JAR files found in the <code><project>/WEB-INF</code> directory to the classpath</li>
 <li>Run ANT tasks to translate JSP pages to Class files and output to <code>&lt;project&gt;/WEB-INF/classes/*</code></li>
