@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/AtlasWBP_2.3.1.qualifier.jar" id="AtlasWBP" version="2.3.1.qualifier">
+      <category name="Atlas WAR Binary Processing"/>
+   </feature>
+   <category-def name="Atlas WAR Binary Processing" label="Atlas WAR Binary Processing">
+      <description>
+         An Atlas for Jimple frontend plugin for processing Java WAR binaries.
+      </description>
+   </category-def>
+</site>
