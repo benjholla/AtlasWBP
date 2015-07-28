@@ -3,6 +3,7 @@ package wbp.common;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class WarToJimple {
 	public static IStatus createWarBinaryProject(String projectName, IPath projectPath, File warFile, IProgressMonitor monitor) throws CoreException, IOException, SootConversionException {
 		IProject project = null;
 		try {
-			monitor.beginTask("Creating WAR Binary project", 5);
+			monitor.beginTask("Creating WAR Binary project", 6);
 			monitor.setTaskName("Unpacking WAR");
 			File projectDirectory = new File(projectPath + File.separator + projectName);
 			
@@ -65,7 +66,7 @@ public class WarToJimple {
 			monitor.worked(1);
 
 			// create empty Java project
-			monitor.setTaskName("Creating Eclipse project");
+			monitor.setTaskName("Creating Eclipse project...");
 			project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 			IProjectDescription desc = project.getWorkspace().newProjectDescription(project.getName());
 			URI location = null;
@@ -86,12 +87,45 @@ public class WarToJimple {
 			project.open(new NullProgressMonitor());
 			List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
 			
+			monitor.worked(1);
+			monitor.setTaskName("Setting project classpath...");
+			
 			// add the default JVM classpath (assuming translator uses the same jvm libraries)
 			IVMInstall vmInstall = JavaRuntime.getDefaultVMInstall();
 			for (LibraryLocation element : JavaRuntime.getLibraryLocations(vmInstall)) {
 				entries.add(JavaCore.newLibraryEntry(element.getSystemLibraryPath(), null, null));
 			}
 			
+			// check the translator preferences are set
+			String translatorPath = Activator.getDefault().getPreferenceStore().getString(PreferencePage.TRANSLATOR_PATH);
+			if(translatorPath == null || translatorPath.equals("")){
+				throw new RuntimeException(PreferencePage.TRANSLATOR_PATH_DESCRIPTION + " is not set.");
+			}
+			File translatorDirectory = new File(translatorPath);
+			if(!translatorDirectory.exists()){
+				throw new RuntimeException(translatorDirectory.getAbsolutePath() + " does not exist.");
+			}
+			
+			File webinfDirectory = new File(projectDirectory.getAbsolutePath() + File.separatorChar + "WEB-INF");
+			
+			//  add the translators runtime JAR libraries
+			if(Activator.getDefault().getPreferenceStore().getBoolean(PreferencePage.COPY_TRANSLATOR_RUNTIME_JARS_BOOLEAN)){
+				// copy each translator jar into a folder denoting the translator in the WEB-INF project folder
+				// jars in the WEB-INF folder will get added to the classpath in the next step
+				File copiedTranslatorJarsDirectory = new File(webinfDirectory.getAbsolutePath() + File.separatorChar + translatorDirectory.getName());
+				copiedTranslatorJarsDirectory.mkdir();
+				for(File translatorJar : getTranslatorJars(translatorDirectory)){
+					File copiedTranslatorJar = new File(copiedTranslatorJarsDirectory.getAbsolutePath() + File.separatorChar + translatorJar.getName()); 
+					copyFile(translatorJar, copiedTranslatorJar);
+				}
+			} else {
+				// add the translators runtime JAR libraries as external sources
+				LinkedList<File> translatorJars = getTranslatorJars(translatorDirectory);
+				for(File translatorJar : translatorJars){
+					entries.add(JavaCore.newLibraryEntry(new Path(translatorJar.getCanonicalPath()), null, new Path(translatorJar.getParentFile().getCanonicalPath())));
+				}
+			}
+
 			// add the JAR libraries in the WEB-INF folder to the project classpath
 			LinkedList<File> projectJars = getProjectJars(projectDirectory);
 			for(File projectJar : projectJars){
@@ -107,21 +141,13 @@ public class WarToJimple {
 			jProject.setRawClasspath(entries.toArray(new IClasspathEntry[entries.size()]), null);
 			
 			monitor.worked(1);
-			Log.info("Successfully created WBP project");
+			Log.info("Successfully created WBP project [" + projectName + "]");
 			if (monitor.isCanceled()){
 				return Status.CANCEL_STATUS;
 			}
 
 			// run ant tasks to precompile JSPs
-			monitor.setTaskName("Translating Java Server Pages");
-			String translatorPath = Activator.getDefault().getPreferenceStore().getString(PreferencePage.TRANSLATOR_PATH);
-			if(translatorPath == null || translatorPath.equals("")){
-				throw new RuntimeException(PreferencePage.TRANSLATOR_PATH_DESCRIPTION + " is not set.");
-			}
-			File translatorDirectory = new File(translatorPath);
-			if(!translatorDirectory.exists()){
-				throw new RuntimeException(translatorDirectory.getAbsolutePath() + " does not exist.");
-			}
+			monitor.setTaskName("Translating Java Server Pages...");
 			String buildTaskPath = Activator.getDefault().getPreferenceStore().getString(PreferencePage.ANT_PRECOMPILE_JSP_BUILD_TASK_PATH);
 			if(buildTaskPath == null || buildTaskPath.equals("")){
 				throw new RuntimeException(PreferencePage.ANT_PRECOMPILE_JSP_BUILD_TASK_PATH_DESCRIPTION + " is not set.");
@@ -132,13 +158,12 @@ public class WarToJimple {
 			}
 			precompileJavaServerPages(translatorDirectory, projectDirectory, buildTaskFile, new NullProgressMonitor());
 			monitor.worked(1);
-			Log.info("Successfully translated JSPs");
+			Log.info("Successfully translated JSPs [" + projectName + "]");
 			if (monitor.isCanceled()){
 				return Status.CANCEL_STATUS;
 			}
 
-			monitor.setTaskName("Adding translated Class files to Jar");
-			File webinfDirectory = new File(projectDirectory.getAbsolutePath() + File.separatorChar + "WEB-INF");
+			monitor.setTaskName("Adding translated Class files to Jar...");
 			File classesJar = new File(webinfDirectory.getAbsolutePath() + File.separatorChar + "classes.jar");
 			File classesDirectory = new File(webinfDirectory.getAbsolutePath() + File.separatorChar + "classes");
 			WarUtils.jar(classesDirectory, classesJar);
@@ -147,10 +172,11 @@ public class WarToJimple {
 				return Status.CANCEL_STATUS;
 			}
 			
-			monitor.setTaskName("Converting Jar files to Jimple");
+			monitor.setTaskName("Converting Jar files to Jimple...");
 			File jimpleDirectory = new File(projectDirectory.getAbsolutePath() + File.separatorChar + "WEB-INF" + File.separatorChar + "jimple");
-			jarToJimple(classesJar, jimpleDirectory);
+			jarToJimple(classesJar, jimpleDirectory, entries);
 			monitor.worked(1);
+			Log.info("Successfully generated Jimple [" + projectName + "]");
 			
 			return Status.OK_STATUS;
 		} finally {
@@ -162,7 +188,7 @@ public class WarToJimple {
 	}
 	
 	// helper method for converting a jar file of classes to jimple
-	private static void jarToJimple(File jar, File outputDirectory) throws SootConversionException {
+	private static void jarToJimple(File jar, File outputDirectory, List<IClasspathEntry> entries) throws SootConversionException, IOException {
 		if(!outputDirectory.exists()){
 			outputDirectory.mkdirs();
 		}
@@ -170,14 +196,24 @@ public class WarToJimple {
 		try {
 			G.reset();
 		
-			String[] args = new String[] {
-					"-src-prec", "class", 
-					"--xml-attributes",
-					"-f", "jimple",
-					"-allow-phantom-refs",
-					"-output-dir", outputDirectory.getAbsolutePath(),
-					"-process-dir", jar.getAbsolutePath()
-			};
+			StringBuilder classpath = new StringBuilder();
+			for(IClasspathEntry entry: entries){
+				classpath.append(entry.getPath().toFile().getCanonicalPath());
+				classpath.append(File.pathSeparator);
+			}
+
+			ArrayList<String> argList = new ArrayList<String>();
+			argList.add("-src-prec"); argList.add("class");
+			argList.add("--xml-attributes");
+			argList.add("-f"); argList.add("jimple");
+			argList.add("-cp"); argList.add(classpath.toString());
+			if(Activator.getDefault().getPreferenceStore().getBoolean(PreferencePage.ALLOW_PHANTOM_REFERENCES_BOOLEAN)){
+				argList.add("-allow-phantom-refs");
+			}
+			argList.add("-output-dir"); argList.add(outputDirectory.getAbsolutePath());
+			argList.add("-process-dir"); argList.add(jar.getAbsolutePath());
+			argList.add("-include-all");
+			String[] args = argList.toArray(new String[argList.size()]);
 			
 			try {
 				soot.Main.main(args);
@@ -220,6 +256,11 @@ public class WarToJimple {
 		return findJars(new File(projectDirectory.getAbsolutePath() + File.separatorChar + "WEB-INF"));
 	}
 	
+	// helper method for location project jar libraries
+	private static LinkedList<File> getTranslatorJars(File translatorDirectory){
+		return findJars(translatorDirectory);
+	}
+	
 	// helper method for recursively finding jar files in a given directory
 	private static LinkedList<File> findJars(File directory){
 		LinkedList<File> jars = new LinkedList<File>();
@@ -244,6 +285,11 @@ public class WarToJimple {
 		runner.setArguments("-Dtranslator.home=\"" + translatorDirectory.getAbsolutePath() 
 							+ "\" -Dwebapp.path=\"" + projectDirectory.getAbsolutePath() + "\"");
 		runner.run(monitor);
+	}
+	
+	// helper method to copy a file from source to destination
+	private static void copyFile(File from, File to) throws IOException {
+		Files.copy(from.toPath(), to.toPath());
 	}
 	
 }
