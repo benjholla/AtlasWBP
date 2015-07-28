@@ -174,7 +174,7 @@ public class WarToJimple {
 			
 			monitor.setTaskName("Converting Jar files to Jimple...");
 			File jimpleDirectory = new File(projectDirectory.getAbsolutePath() + File.separatorChar + "WEB-INF" + File.separatorChar + "jimple");
-			jarToJimple(classesJar, jimpleDirectory, entries);
+			jarToJimple(projectDirectory, classesJar, jimpleDirectory, entries);
 			monitor.worked(1);
 			Log.info("Successfully generated Jimple [" + projectName + "]");
 			
@@ -188,7 +188,7 @@ public class WarToJimple {
 	}
 	
 	// helper method for converting a jar file of classes to jimple
-	private static void jarToJimple(File jar, File outputDirectory, List<IClasspathEntry> entries) throws SootConversionException, IOException {
+	private static void jarToJimple(File projectDirectory, File jar, File outputDirectory, List<IClasspathEntry> entries) throws SootConversionException, IOException {
 		if(!outputDirectory.exists()){
 			outputDirectory.mkdirs();
 		}
@@ -217,7 +217,8 @@ public class WarToJimple {
 			
 			try {
 				soot.Main.main(args);
-				JimpleUtil.writeHeaderFile(JimpleSource.JAR, jar.getAbsolutePath(), outputDirectory.getAbsolutePath());
+				String relativeJarPath = projectDirectory.toURI().relativize(new File(jar.getCanonicalPath()).toURI()).getPath();
+				JimpleUtil.writeHeaderFile(JimpleSource.JAR, relativeJarPath, outputDirectory.getAbsolutePath());
 				
 				// warn about any phantom references
 				Chain<SootClass> phantomClasses = soot.Scene.v().getPhantomClasses();
