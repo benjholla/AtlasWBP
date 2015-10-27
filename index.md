@@ -35,9 +35,9 @@ The high-level process that this plugin performs is the following:
 
 Ready to get started?
 
-1. First [install](./install) the WAR Binary Processing plugin
-2. Then check out the provided [tutorials](./tutorials) to jump start your analysis
+1. First [install](/AtlasWBP/install) the WAR Binary Processing plugin
+2. Then check out the provided [tutorials](/AtlasWBP/tutorials) to jump start your analysis
 
 ## Source Code
 
-Need additional resources?  Checkout the [Javadocs](./javadoc/index.html) or grab a copy of the [source](https://github.com/benjholla/AtlasWBP).
+Need additional resources?  Checkout the [Javadocs](/AtlasWBP/javadoc/index.html) or grab a copy of the [source](https://github.com/benjholla/AtlasWBP).
