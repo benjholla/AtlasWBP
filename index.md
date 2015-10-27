@@ -28,7 +28,7 @@ The high-level process that this plugin performs is the following:
 1. Unpack the WAR file and dump contents in an empty Eclipse Java project
 2. Add all the JAR files found in the `<project>/WEB-INF` directory to the classpath
 3. Run ANT tasks to translate JSP pages to Class files and output to `<project>/WEB-INF/classes/*`
-4. JAR generated Class files into `<project>/WEB-INF/classes.jar`
+4. Bundle generated Class files into a JAR at `<project>/WEB-INF/classes.jar`
 5. Convert `classes.jar` to Jimple and output to `<project>/WEB-INF/jimple/*`
 
 ## Getting Started
