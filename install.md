@@ -15,7 +15,7 @@ Follow the steps below to install the WAR Binary Processing plugin from the Ecli
 
 1. Start Eclipse, then select `Help` &gt; `Install New Software`.
 2. Click `Add`, in the top-right corner.
-3. In the `Add Repository` dialog that appears, enter `WAR Binary Processing`for the `Name` and `http://ben-holland.com/AtlasWBP/updates/` for the `Location`.
+3. In the `Add Repository` dialog that appears, enter &quot;`WAR Binary Processing`&quot; for the `Name` and &quot;[http://ben-holland.com/AtlasWBP/updates/](http://ben-holland.com/AtlasWBP/updates/)&quot; for the `Location`.
 4. In the `Available Software` dialog, select the checkbox next to "WAR Binary Processing" and click `Next` followed by `OK`.
 5. In the next window, you'll see a list of the tools to be downloaded. Click `Next`.
 6. Read and accept the license agreements, then click `Finish`. If you get a security warning saying that the authenticity or validity of the software can't be established, click `OK`.

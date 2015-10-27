@@ -5,7 +5,7 @@ layout: default
 ## Overview
 The WAR Binary Processing project is a frontend plugin built on top of [Atlas](http://www.ensoftcorp.com/atlas/) to add support for processing [Java WAR](https://en.wikipedia.org/wiki/WAR_%28file_format%29) binaries for use in program analysis.
 
-	In software engineering, a WAR file (or Web application ARchive) is a JAR file used to distribute a collection of JavaServer Pages, Java Servlets, Java classes, XML files, tag libraries, static web pages (HTML and related files) and other resources that together constitute a web application.
+<blockquote cite="https://en.wikipedia.org/wiki/WAR_(file_format)">In software engineering, a WAR file (or Web application ARchive) is a JAR file used to distribute a collection of JavaServer Pages, Java Servlets, Java classes, XML files, tag libraries, static web pages (HTML and related files) and other resources that together constitute a web application.</blockquote>
 
 Source: [https://en.wikipedia.org/wiki/WAR_(file_format)](https://en.wikipedia.org/wiki/WAR_(file_format))
 
