@@ -22,4 +22,4 @@ Follow the steps below to install the WAR Binary Processing plugin from the Ecli
 7. When the installation completes, restart Eclipse.
 
 ## Installing from source
-If you want to install from source for bleeding edge changes, follow the instructions at the [source](https://github.com/benjholla/AtlasWBP) repository.
+If you want to install from source for bleeding edge changes, first grab a copy of the [source](https://github.com/benjholla/AtlasWBP) repository. In the Eclipse workspace, import the `wbp` Eclipse project located in the source repository.  Right click on the project and select `Export`.  Select `Plug-in Development` &gt; `Deployable plug-ins and fragments`.  Select the `Install into host. Repository:` radio box and click `Finish`.  Press `OK` for the notice about unsigned software.  Once Eclipse restarts the plugin will be installed and it is advisable to close or remove the `wbp` project from the workspace.
