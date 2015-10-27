@@ -77,9 +77,11 @@ To process a WAR file simply use the `WAR Binary Project` import wizard. In Ecli
 
 A sample WAR file for a vulnerable webserver application can be found at [https://github.com/benjholla/LoginSideChannels](https://github.com/benjholla/LoginSideChannels).
 
-<center>     
+<center>
 ![Import Wizard Step 1](/AtlasWBP/images/import_wizard_1.png)
-<br />
+</center>
+
+<center>
 ![Import Wizard Step 2](/AtlasWBP/images/import_wizard_2.png)
 </center>
 
