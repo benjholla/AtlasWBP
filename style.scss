@@ -260,6 +260,12 @@ blockquote {
     font-style: italic;
 }
 
+pre {
+  code {
+    border: none;
+  }
+}
+
 code {
   border: 1px solid #ddd;
   padding-left: 1px;
