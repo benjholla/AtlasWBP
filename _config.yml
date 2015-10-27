@@ -9,7 +9,7 @@ name: AtlasWBP
 description: An Atlas frontend plugin for processing Java WAR binaries
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
-avatar: https://ben-holland.com/JReFrameworker/images/JReFrameworker.png
+avatar: https://ben-holland.com/AtlasWBP/images/toolbox.png
 
 #
 # Flags below are optional
@@ -75,5 +75,14 @@ exclude:
     - Gemfile
     - Gemfile.lock
     - LICENSE
+    - JekylNow-LICENSE
     - README.md
     - CNAME
+    - .git/
+    - .gitignore
+
+# Include the following files and directories
+include:
+    - updates/
+    - javadoc/
+    - supplemental_files/
