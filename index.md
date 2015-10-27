@@ -5,7 +5,7 @@ layout: default
 ## Overview
 The WAR Binary Processing project is a frontend plugin built on top of [Atlas](http://www.ensoftcorp.com/atlas/) to add support for processing [Java WAR](https://en.wikipedia.org/wiki/WAR_%28file_format%29) binaries for use in program analysis.
 
-<blockquote cite="https://en.wikipedia.org/wiki/WAR_(file_format)">In software engineering, a WAR file (or Web application ARchive) is a JAR file used to distribute a collection of JavaServer Pages, Java Servlets, Java classes, XML files, tag libraries, static web pages (HTML and related files) and other resources that together constitute a web application.</blockquote>
+	In software engineering, a WAR file (or Web application ARchive) is a JAR file used to distribute a collection of JavaServer Pages, Java Servlets, Java classes, XML files, tag libraries, static web pages (HTML and related files) and other resources that together constitute a web application.
 
 Source: [https://en.wikipedia.org/wiki/WAR_(file_format)](https://en.wikipedia.org/wiki/WAR_(file_format))
 
@@ -26,17 +26,17 @@ The aim of this project is to provide an Atlas for Jimple frontend for processin
 The high-level process that this plugin performs is the following:
 
 1. Unpack the WAR file and dump contents in an empty Eclipse Java project
-2. Add all the JAR files found in the <code><project>/WEB-INF</code> directory to the classpath
+2. Add all the JAR files found in the `<project>/WEB-INF` directory to the classpath
 3. Run ANT tasks to translate JSP pages to Class files and output to `<project>/WEB-INF/classes/*`
 4. JAR generated Class files into `<project>/WEB-INF/classes.jar`
-5. Convert classes.jar to Jimple and output to `<project>/WEB-INF/jimple/*`
+5. Convert `classes.jar` to Jimple and output to `<project>/WEB-INF/jimple/*`
 
 ## Getting Started
 
 Ready to get started?
 
-1. First [install](./install.html) the WAR Binary Processing plugin
-2. Then check out the provided <a href="./tutorials.html">tutorial</a> to jump start your analysis
+1. First [install](./install) the WAR Binary Processing plugin
+2. Then check out the provided [tutorials](./tutorials) to jump start your analysis
 
 ## Source Code
 

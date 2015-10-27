@@ -6,7 +6,7 @@
 name: AtlasWBP
 
 # Short bio or description (displayed in the header)
-description: An Atlas frontend plugin for processing Java WAR binaries
+description: An Atlas frontend for processing Java WAR binaries
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar: https://ben-holland.com/AtlasWBP/images/toolbox.png

@@ -4,7 +4,7 @@ title: Tutorials
 permalink: /tutorials/
 ---
 
-If you haven't already, [install](./install.html) the WAR Binary Processing plugin into Eclipse.
+If you haven't already, [install](./install) the WAR Binary Processing plugin into Eclipse.
 
 ## Configuration
 The typical contents of a WAR file include a `META-INF` directory that contains the WAR manifest, a `WEB-INF` directory that contains compiled Java Class files, support libraries, and a web.xml file. At the root level there are static web resources such as JavaScript, CSS, and images, as well as uncompiled JSP files (denoted below as the `myjsps` directory).
@@ -64,7 +64,7 @@ Since the implementation specific classes for each translator are not included i
 
 Before processing a WAR binary, you should remember to change your translator preferences by navigating in Eclipse to `Eclipse` &gt; `Preferences` (or `Window` &gt; `Preferences`) &gt; `WBP`. Select the location of the translator directory and the ANT build task. The build task file for each of the provided Tomcat translators is included as the `compile-jsp.xml` file.
 
-![WBP Preferences](./images/preferences.png)
+![WBP Preferences](../images/preferences.png)
 
 Older versions of Tomcat can be found in the archives for major versions [6](https://archive.apache.org/dist/tomcat/tomcat-6/), [7](https://archive.apache.org/dist/tomcat/tomcat-7/), and [8](https://archive.apache.org/dist/tomcat/tomcat-8/).  IBM's Websphere has not been tested but a pre-compilation build task should be straightforward enough (see [reference 1](http://stackoverflow.com/a/1163816/475329), [reference 2](https://www-01.ibm.com/support/knowledgecenter/SSEQTP_8.5.5/com.ibm.websphere.nd.doc/ae/tovr_ant.html), and [reference 3](http://www-01.ibm.com/support/knowledgecenter/SSCKBL_8.0.0/com.ibm.websphere.javadoc.doc/web/apidocs/com/ibm/websphere/ant/tasks/JspC.html)).
 
@@ -75,8 +75,8 @@ To process a WAR file simply use the `WAR Binary Project` import wizard. In Ecli
 
 A sample WAR file for a vulnerable webserver application can be found at [https://github.com/benjholla/LoginSideChannels](https://github.com/benjholla/LoginSideChannels).
         
-![Import Wizard Step 1](./images/import_wizard_1.png)
+![Import Wizard Step 1](../images/import_wizard_1.png)
 <br />
-![Import Wizard Step 2](./images/import_wizard_2.png)
+![Import Wizard Step 2](../images/import_wizard_2.png)
 
 To index the project, navigate to the `Atlas` menu and select `Manage Project Settings`.  Ensure that the WAR file binary project is listed under the `Map` column and other projects that should be excluded from the analysis are not listed.  Click `OK` when the project index settings are correct, then navigate to the `Atlas` menu and select `Re-Map Workspace`.  When the indexing process is complete you can query against indexed project like normal.  For additional information on using Atlas see [http://www.ensoftcorp.com/atlas/](http://www.ensoftcorp.com/atlas/).
