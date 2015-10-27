@@ -4,7 +4,7 @@ title: Tutorials
 permalink: /tutorials/
 ---
 
-If you haven't already, [install](./install) the WAR Binary Processing plugin into Eclipse.
+If you haven't already, [install](/AtlasWBP/install) the WAR Binary Processing plugin into Eclipse.
 
 ## Configuration
 The typical contents of a WAR file include a `META-INF` directory that contains the WAR manifest, a `WEB-INF` directory that contains compiled Java Class files, support libraries, and a web.xml file. At the root level there are static web resources such as JavaScript, CSS, and images, as well as uncompiled JSP files (denoted below as the `myjsps` directory).
