@@ -260,6 +260,11 @@ blockquote {
     font-style: italic;
 }
 
+code {
+  border: 1px solid #ddd;
+  background-color: $lightGray;
+}
+
 .post {
   .comments {
     margin-top: 10px;
