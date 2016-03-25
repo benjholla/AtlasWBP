@@ -77,16 +77,9 @@ To process a WAR file simply use the `WAR Binary Project` import wizard. In Ecli
 
 A sample WAR file for a vulnerable webserver application can be found at [https://github.com/benjholla/LoginSideChannels](https://github.com/benjholla/LoginSideChannels).
 
-<center>
-
+{: style="text-align: center"}
 ![Import Wizard Step 1](/AtlasWBP/images/import_wizard_1.png)
 
-</center>
-
-<center>
-
 ![Import Wizard Step 2](/AtlasWBP/images/import_wizard_2.png)
-
-</center>
 
 To index the project, navigate to the `Atlas` menu and select `Manage Project Settings`.  Ensure that the WAR file binary project is listed under the `Map` column and other projects that should be excluded from the analysis are not listed.  Click `OK` when the project index settings are correct, then navigate to the `Atlas` menu and select `Re-Map Workspace`.  When the indexing process is complete you can query against indexed project like normal.  For additional information on using Atlas see [http://www.ensoftcorp.com/atlas/](http://www.ensoftcorp.com/atlas/).
