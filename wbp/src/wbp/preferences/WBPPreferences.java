@@ -14,7 +14,7 @@ public class WBPPreferences extends AbstractPreferenceInitializer {
 	 * Defines the path to the JSP translator
 	 */
 	public static final String TRANSLATOR_PATH = "TRANSLATOR_PATH";
-	public static final String TRANSLATOR_PATH_DEFAULT = null;
+	public static final String TRANSLATOR_PATH_DEFAULT = "";
 	private static String translatorPathValue = TRANSLATOR_PATH_DEFAULT;
 	
 	public static String getTranslatorPath(){
@@ -28,7 +28,7 @@ public class WBPPreferences extends AbstractPreferenceInitializer {
 	 * Defines the path to the ant task to precompile the JSP
 	 */
 	public static final String ANT_PRECOMPILE_JSP_BUILD_TASK_PATH = "ANT_PRECOMPILE_JSP_BUILD_TASK_PATH";
-	public static final String ANT_PRECOMPILE_JSP_BUILD_TASK_PATH_DEFAULT = null;
+	public static final String ANT_PRECOMPILE_JSP_BUILD_TASK_PATH_DEFAULT = "";
 	private static String antPrecompileJSPBuildTaskPathValue = ANT_PRECOMPILE_JSP_BUILD_TASK_PATH_DEFAULT;
 	
 	public static String getAntPrecompileJSPBuildTaskPath(){
