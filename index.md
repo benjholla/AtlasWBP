@@ -21,7 +21,7 @@ The aim of this project is to provide an Atlas for Jimple frontend for processin
 
 - Import Wizard for processing Java WARs
 - Extensible support for multiple JSP translator platforms
-- Tested pre-compilation support for Tomcat 6, 7, and 8
+- Tested pre-compilation support for Tomcat 6, 7, 8, and 9
 
 The high-level process that this plugin performs is the following:
 
