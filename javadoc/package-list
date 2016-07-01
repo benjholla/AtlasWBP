@@ -1,4 +1,6 @@
 wbp
-wbp.common
+wbp.core
+wbp.handlers
 wbp.log
+wbp.preferences
 wbp.ui
