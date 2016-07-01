@@ -1,5 +1,5 @@
 <project name="Webapp Precompilation" default="all" basedir=".">
-   <import file="${tomcat.home}/bin/catalina-tasks.xml" />
+   <import file="${translator.home}/bin/catalina-tasks.xml" />
    
    <target name="jspc">
       <jasper validateXml="false" uriroot="${webapp.path}" webXmlFragment="${webapp.path}/WEB-INF/generated_web.xml" outputDir="${webapp.path}/WEB-INF/src" />
@@ -14,11 +14,11 @@
             <fileset dir="${webapp.path}/WEB-INF/lib">
                <include name="*.jar" />
             </fileset>
-            <pathelement location="${tomcat.home}/lib" />
-            <fileset dir="${tomcat.home}/lib">
+            <pathelement location="${translator.home}/lib" />
+            <fileset dir="${translator.home}/lib">
                <include name="*.jar" />
             </fileset>
-            <fileset dir="${tomcat.home}/bin">
+            <fileset dir="${translator.home}/bin">
                <include name="*.jar" />
             </fileset>
          </classpath>
