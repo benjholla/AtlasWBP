@@ -58,7 +58,7 @@ To clearly represent the application byte code in the project the contents of th
 
 Since the implementation specific classes for each translator are not included in compiled WAR file, you must provide them and an Ant task to pre-compile the WAR with the dependent classes in order for the AtlasWBP plugin to decompile the WAR completely.  The required support files for the current Tomcat releases (6, 7, and 8 at the time of this writing) are available below, if you don't care about the specifics of which translator the WAR will run on then just use one of the provided support packages.
 
-- [apache-tomcat-6.0.45-translator-supportt.zip](/AtlasWBP/supplemental_files/apache-tomcat-6.0.45-translator-support.zip)
+- [apache-tomcat-6.0.45-translator-support.zip](/AtlasWBP/supplemental_files/apache-tomcat-6.0.45-translator-support.zip)
 - [apache-tomcat-7.0.70-translator-support.zip](/AtlasWBP/supplemental_files/apache-tomcat-7.0.70-translator-support.zip)
 - [apache-tomcat-8.0.36-translator-support.zip](/AtlasWBP/supplemental_files/apache-tomcat-8.0.36-translator-support.zip)
 - [apache-tomcat-9.0.0M8-translator-support.zip](/AtlasWBP/supplemental_files/apache-tomcat-9.0.0M8-translator-support.zip)
