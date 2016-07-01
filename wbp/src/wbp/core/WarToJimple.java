@@ -1,4 +1,4 @@
-package wbp.common;
+package wbp.core;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,16 +29,16 @@ import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.LibraryLocation;
 
-import soot.G;
-import soot.SootClass;
-import soot.util.Chain;
-import wbp.Activator;
-import wbp.log.Log;
-import wbp.ui.PreferencePage;
-
 import com.ensoftcorp.abp.common.soot.ConfigManager;
 import com.ensoftcorp.abp.common.util.JimpleUtil;
 import com.ensoftcorp.abp.common.util.JimpleUtil.JimpleSource;
+
+import soot.G;
+import soot.SootClass;
+import soot.util.Chain;
+import wbp.log.Log;
+import wbp.preferences.WBPPreferences;
+import wbp.ui.WBPPreferencePage;
 
 public class WarToJimple {
 	
@@ -97,9 +97,9 @@ public class WarToJimple {
 			}
 			
 			// check the translator preferences are set
-			String translatorPath = Activator.getDefault().getPreferenceStore().getString(PreferencePage.TRANSLATOR_PATH);
+			String translatorPath = WBPPreferences.getTranslatorPath();
 			if(translatorPath == null || translatorPath.equals("")){
-				throw new RuntimeException(PreferencePage.TRANSLATOR_PATH_DESCRIPTION + " is not set.");
+				throw new RuntimeException(WBPPreferencePage.TRANSLATOR_PATH_DESCRIPTION + " is not set.");
 			}
 			File translatorDirectory = new File(translatorPath);
 			if(!translatorDirectory.exists()){
@@ -109,7 +109,7 @@ public class WarToJimple {
 			File webinfDirectory = new File(projectDirectory.getAbsolutePath() + File.separatorChar + "WEB-INF");
 			
 			//  add the translators runtime JAR libraries
-			if(Activator.getDefault().getPreferenceStore().getBoolean(PreferencePage.COPY_TRANSLATOR_RUNTIME_JARS_BOOLEAN)){
+			if(WBPPreferences.isCopyTranslatorRuntimeJarsEnabled()){
 				// copy each translator jar into a folder denoting the translator in the WEB-INF project folder
 				// jars in the WEB-INF folder will get added to the classpath in the next step
 				File copiedTranslatorJarsDirectory = new File(webinfDirectory.getAbsolutePath() + File.separatorChar + translatorDirectory.getName());
@@ -148,9 +148,9 @@ public class WarToJimple {
 
 			// run ant tasks to precompile JSPs
 			monitor.setTaskName("Translating Java Server Pages...");
-			String buildTaskPath = Activator.getDefault().getPreferenceStore().getString(PreferencePage.ANT_PRECOMPILE_JSP_BUILD_TASK_PATH);
+			String buildTaskPath = WBPPreferences.getAntPrecompileJSPBuildTaskPath();
 			if(buildTaskPath == null || buildTaskPath.equals("")){
-				throw new RuntimeException(PreferencePage.ANT_PRECOMPILE_JSP_BUILD_TASK_PATH_DESCRIPTION + " is not set.");
+				throw new RuntimeException(WBPPreferencePage.ANT_PRECOMPILE_JSP_BUILD_TASK_PATH_DESCRIPTION + " is not set.");
 			}
 			File buildTaskFile = new File(buildTaskPath);
 			if(!buildTaskFile.exists()){
@@ -207,7 +207,7 @@ public class WarToJimple {
 			argList.add("--xml-attributes");
 			argList.add("-f"); argList.add("jimple");
 			argList.add("-cp"); argList.add(classpath.toString());
-			if(Activator.getDefault().getPreferenceStore().getBoolean(PreferencePage.ALLOW_PHANTOM_REFERENCES_BOOLEAN)){
+			if(WBPPreferences.isPhantomReferencesEnabled()){
 				argList.add("-allow-phantom-refs");
 			}
 			argList.add("-output-dir"); argList.add(outputDirectory.getAbsolutePath());

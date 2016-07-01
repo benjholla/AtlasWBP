@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   
+   <!-- define command some handler extensions -->
+   <extension
+	      point="org.eclipse.ui.handlers">
+	   <handler
+	         commandId="wbp.menus.editWBPPreferencesCommand"
+	         class="wbp.handlers.WBPPreferencesHandler">
+	   </handler>
+	</extension>
+   
+   <!-- extend the Atlas Toolbox menu with a new submenu for war binary processing -->
+	<extension
+	      point="org.eclipse.ui.menus">
+	   <menuContribution
+	         locationURI="menu:com.ensoftcorp.open.commons.menus.toolbox?after=additions">
+	      <menu
+	            label="War Binary Processing"
+	            id="wbp.menus.wbpMenu">
+	         <command
+	               commandId="wbp.menus.editWBPPreferencesCommand"
+	               label="Edit Preferences"
+	               id="wbp.menus.editWBPPreferencesCommandMenuItem">
+	         </command>
+	      </menu>
+	   </menuContribution>
+	</extension>
+	
+   <!-- add the import wizard extension -->
    <extension
          point="org.eclipse.ui.importWizards">
       <category
@@ -18,12 +46,22 @@
          </description>
       </wizard>
    </extension>
+   
+   <!-- create an initializer extension to initialize preferences -->
+   <extension
+      point="org.eclipse.equinox.preferences.preferences">
+	   <initializer
+	         class="wbp.preferences.WBPPreferences">
+	   </initializer>
+	</extension>
+   
+   <!-- add the preference page ui extension point -->
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="wbp.ui.PreferencePage"
+            class="wbp.ui.WBPPreferencePage"
             id="wbp.preferences"
-            name="WBP">
+            name="War Binary Processing">
       </page>
    </extension>
 

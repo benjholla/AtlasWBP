@@ -42,7 +42,7 @@ import org.eclipse.ui.progress.UIJob;
 import org.osgi.framework.Bundle;
 
 import wbp.Activator;
-import wbp.common.WarToJimple;
+import wbp.core.WarToJimple;
 
 import com.ensoftcorp.atlas.core.log.Log;
 

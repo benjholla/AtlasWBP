@@ -13,35 +13,33 @@ public class Activator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static Activator plugin;
-	private static BundleContext context;
 
-	public static BundleContext getContext() {
-		return context;
-	}
-	
 	/**
 	 * The constructor
 	 */
-	public Activator() {}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
-	public void start(BundleContext bundleContext) throws Exception {
-		super.start(bundleContext);
-		plugin = this;
-		Activator.context = bundleContext;
+	public Activator() {
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+	 * 
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.
+	 * BundleContext)
 	 */
-	public void stop(BundleContext bundleContext) throws Exception {
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+		plugin = this;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.
+	 * BundleContext)
+	 */
+	public void stop(BundleContext context) throws Exception {
 		plugin = null;
-		Activator.context = null;
-		super.stop(bundleContext);
+		super.stop(context);
 	}
 
 	/**
@@ -52,5 +50,4 @@ public class Activator extends AbstractUIPlugin {
 	public static Activator getDefault() {
 		return plugin;
 	}
-
 }

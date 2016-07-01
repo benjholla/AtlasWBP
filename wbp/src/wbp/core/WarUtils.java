@@ -1,4 +1,4 @@
-package wbp.common;
+package wbp.core;
 
 import java.io.File;
 import java.io.FileInputStream;
