@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="AtlasWBP"
+      id="wbp"
       label="AtlasWBP"
-      version="3.0.7.qualifier"
+      version="3.0.8.qualifier"
       provider-name="Ben Holland">
 
    <description url="https://ben-holland.com/AtlasWBP">
@@ -38,7 +38,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
    <url>
       <update label="ben-holland.com" url="http://ben-holland.com/AtlasWBP/updates/"/>
-      <discovery label="ben-holland.com" url="http://ben-holland.com/AtlasWBP/updates/"/>
+      <discovery label="AtlasWBP" url="http://ben-holland.com/AtlasWBP/updates/"/>
       <discovery label="Toolbox Commons" url="https://ensoftcorp.github.io/toolbox-commons/updates/"/>
       <discovery label="Atlas" url="http://download.ensoftcorp.com/atlas/eclipse"/>
    </url>

@@ -213,6 +213,10 @@ public class WarToJimple {
 			argList.add("-output-dir"); argList.add(outputDirectory.getAbsolutePath());
 			argList.add("-process-dir"); argList.add(jar.getAbsolutePath());
 			argList.add("-include-all");
+			
+			// use original names
+			argList.add("-p"); argList.add("jb"); argList.add("use-original-names");
+			
 			String[] args = argList.toArray(new String[argList.size()]);
 			
 			try {
