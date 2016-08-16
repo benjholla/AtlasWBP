@@ -12,6 +12,9 @@
    <feature url="features/AtlasWBP_3.0.7.201607011022.jar" id="AtlasWBP" version="3.0.7.201607011022">
       <category name="Atlas WAR Binary Processing"/>
    </feature>
+   <feature url="features/wbp_3.0.10.201608161229.jar" id="wbp" version="3.0.10.201608161229">
+      <category name="Atlas WAR Binary Processing"/>
+   </feature>
    <category-def name="Atlas WAR Binary Processing" label="Atlas WAR Binary Processing">
       <description>
          An Atlas for Jimple frontend plugin for processing Java WAR binaries.
