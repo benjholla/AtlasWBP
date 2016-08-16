@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: WAR Binary Processing
 Bundle-SymbolicName: wbp;singleton:=true
-Bundle-Version: 3.0.7.qualifier
+Bundle-Version: 3.0.10.qualifier
 Bundle-Activator: wbp.Activator
 Bundle-Vendor: Ben Holland
 Require-Bundle: org.eclipse.ui,
@@ -16,10 +16,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ant.core,
  ca.mcgill.sable.soot;bundle-version="2.5.2",
  ca.mcgill.sable.soot.lib;bundle-version="2.5.2",
- com.ensoftcorp.atlas.core;bundle-version="3.0.7",
- com.ensoftcorp.atlas.java.core;bundle-version="3.0.7",
- com.ensoftcorp.atlas.java.ui;bundle-version="3.0.7",
- com.ensoftcorp.abp.common;bundle-version="3.0.7",
- com.ensoftcorp.open.commons;bundle-version="3.0.7"
+ com.ensoftcorp.atlas.core;bundle-version="3.0.10",
+ com.ensoftcorp.atlas.java.core;bundle-version="3.0.10",
+ com.ensoftcorp.atlas.java.ui;bundle-version="3.0.10",
+ com.ensoftcorp.abp.common;bundle-version="3.0.10",
+ com.ensoftcorp.open.commons;bundle-version="3.0.10"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

@@ -2,7 +2,7 @@
 <feature
       id="wbp"
       label="AtlasWBP"
-      version="3.0.8.qualifier"
+      version="3.0.10.qualifier"
       provider-name="Ben Holland">
 
    <description url="https://ben-holland.com/AtlasWBP">
