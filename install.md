@@ -27,6 +27,9 @@ If you want to install from source for bleeding edge changes, first grab a copy 
 ## Changelog
 Note that version numbers are based off [Atlas](http://www.ensoftcorp.com/atlas/download/) version numbers.
 
+### 3.0.10
+- Bumped Atlas dependency to 3.0.10 to avoid a discovered bug in Jimple generation
+
 ### 3.0.7
 - Centralized logging, refactored packages, added toolbox commons menu extension point, updated supplemental files, bug fixes
 
