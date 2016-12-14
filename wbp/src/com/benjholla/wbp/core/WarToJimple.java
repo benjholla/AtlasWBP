@@ -1,4 +1,4 @@
-package wbp.core;
+package com.benjholla.wbp.core;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +29,9 @@ import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.LibraryLocation;
 
+import com.benjholla.wbp.log.Log;
+import com.benjholla.wbp.preferences.WBPPreferences;
+import com.benjholla.wbp.ui.WBPPreferencePage;
 import com.ensoftcorp.abp.common.soot.ConfigManager;
 import com.ensoftcorp.abp.common.util.JimpleUtil;
 import com.ensoftcorp.abp.common.util.JimpleUtil.JimpleSource;
@@ -36,9 +39,6 @@ import com.ensoftcorp.abp.common.util.JimpleUtil.JimpleSource;
 import soot.G;
 import soot.SootClass;
 import soot.util.Chain;
-import wbp.log.Log;
-import wbp.preferences.WBPPreferences;
-import wbp.ui.WBPPreferencePage;
 
 public class WarToJimple {
 	

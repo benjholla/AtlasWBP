@@ -1,4 +1,4 @@
-package wbp;
+package com.benjholla.wbp;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;

@@ -1,4 +1,4 @@
-package wbp.core;
+package com.benjholla.wbp.core;
 
 import java.io.File;
 import java.io.FileInputStream;

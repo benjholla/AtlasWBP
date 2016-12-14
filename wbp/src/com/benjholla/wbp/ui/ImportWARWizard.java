@@ -1,4 +1,4 @@
-package wbp.ui;
+package com.benjholla.wbp.ui;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,9 +41,8 @@ import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import org.eclipse.ui.progress.UIJob;
 import org.osgi.framework.Bundle;
 
-import wbp.Activator;
-import wbp.core.WarToJimple;
-
+import com.benjholla.wbp.Activator;
+import com.benjholla.wbp.core.WarToJimple;
 import com.ensoftcorp.atlas.core.log.Log;
 
 public class ImportWARWizard extends Wizard implements IImportWizard {

@@ -1,4 +1,4 @@
-package wbp.log;
+package com.benjholla.wbp.log;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
@@ -7,7 +7,7 @@ import org.eclipse.core.runtime.Status;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-import wbp.Activator;
+import com.benjholla.wbp.Activator;
 
 /**
  * Centralized logging for Eclipse plugins.

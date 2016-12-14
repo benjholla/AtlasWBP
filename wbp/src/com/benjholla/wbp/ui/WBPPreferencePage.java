@@ -1,4 +1,4 @@
-package wbp.ui;
+package com.benjholla.wbp.ui;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
@@ -7,8 +7,8 @@ import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-import wbp.Activator;
-import wbp.preferences.WBPPreferences;
+import com.benjholla.wbp.Activator;
+import com.benjholla.wbp.preferences.WBPPreferences;
 
 public class WBPPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 

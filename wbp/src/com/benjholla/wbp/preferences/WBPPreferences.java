@@ -1,10 +1,10 @@
-package wbp.preferences;
+package com.benjholla.wbp.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-import wbp.Activator;
-import wbp.log.Log;
+import com.benjholla.wbp.Activator;
+import com.benjholla.wbp.log.Log;
 
 public class WBPPreferences extends AbstractPreferenceInitializer {
 
