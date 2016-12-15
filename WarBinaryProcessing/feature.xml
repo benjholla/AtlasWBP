@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="wbp"
-      label="AtlasWBP"
+      id="com.benjholla.wbp.feature.group"
+      label="Atlas WAR Binary Processing"
       version="3.0.13.qualifier"
       provider-name="Ben Holland">
 
