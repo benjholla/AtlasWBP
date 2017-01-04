@@ -37,7 +37,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    </license>
 
    <url>
-      <update label="ben-holland.com" url="http://ben-holland.com/AtlasWBP/updates/"/>
       <discovery label="Atlas" url="http://download.ensoftcorp.com/atlas/eclipse"/>
    </url>
 
