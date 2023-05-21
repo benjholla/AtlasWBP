@@ -2,7 +2,7 @@
 <feature
       id="com.benjholla.wbp.feature"
       label="Atlas WAR Binary Processing"
-      version="3.1.6.qualifier"
+      version="3.9.2.qualifier"
       provider-name="Ben Holland">
 
    <description url="https://ben-holland.com/AtlasWBP">
